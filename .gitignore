@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Poetry and build artifacts
+dist/
+build/
+*.egg-info/
+*.whl
+
+# Virtual environments (optional, in case one is created locally)
+.venv/
+.env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VSCode settings (optional, editor-specific)
+.vscode/
+
+# pytest cache
+.pytest_cache/
+
+# Mac system files
+.DS_Store
+
+# Temporary files
+*.log
+*.tmp
