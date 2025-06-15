@@ -10,14 +10,15 @@ jax.config.update("jax_enable_x64", True)
 
 def schechter_mag(phi_star, M_star, alpha, M):
     """
-    Schechter function in magnitude space.
+    Schechter density in magnitude space (unnormalised).
     """
-    exponent = 10 ** (0.4 * (M_star - M))
+    # M: absolute magnitude
+    x = 10 ** (0.4 * (M_star - M))
     return (
         0.4 * jnp.log(10.0)
         * phi_star
-        * exponent ** (alpha + 1)
-        * jnp.exp(-exponent)
+        * x ** (alpha + 1)
+        * jnp.exp(-x)
     )
 
 
