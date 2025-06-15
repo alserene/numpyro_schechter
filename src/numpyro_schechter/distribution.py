@@ -8,7 +8,10 @@ class SchechterMag(Distribution):
     NumPyro-compatible distribution based on the Schechter luminosity function in magnitude space.
     """
     support = constraints.real
-    has_rsample = False
+
+    @property
+    def has_rsample(self) -> bool:
+        return False
 
     def __init__(self, alpha, M_star, logphi, mag_obs, validate_args=None):
         self.alpha = alpha
