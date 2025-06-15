@@ -1,0 +1,7 @@
+sphinx
+sphinx-rtd-theme
+jax
+jaxlib
+numpyro
+myst-parser
+-e ../..
