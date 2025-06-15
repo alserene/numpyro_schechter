@@ -1,4 +1,3 @@
-```markdown
 # numpyro_schechter
 
 **Schechter luminosity function distribution for NumPyro**
@@ -68,4 +67,3 @@ Created by Alice — [aserene@swin.edu.au](mailto:aserene@swin.edu.au)
 ---
 
 *Happy modeling!*
-```
