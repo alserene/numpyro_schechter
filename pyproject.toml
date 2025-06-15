@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "numpyro_schechter"
+version = "0.0.1"
+description = "Schechter luminosity function distribution for NumPyro"
+authors = [
+  "Alice Serene <aserene@swin.edu.au>"
+]
+readme = "README.md"
+license = "MIT-expat"
+packages = [{ include = "numpyro_schechter", from = "src" }]
+keywords = ["numpyro", "schechter", "astronomy", "bayesian", "distribution"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+jax = "*"
+jaxlib = "*"
+numpyro = "*"
+
+[tool.poetry.urls]
+Homepage = "https://github.com/pypa/sampleproject"
+Issues = "https://github.com/pypa/sampleproject/issues"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
