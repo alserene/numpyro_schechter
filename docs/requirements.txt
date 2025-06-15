@@ -4,4 +4,4 @@ jax
 jaxlib
 numpyro
 myst-parser
--e ../..
+-e .
