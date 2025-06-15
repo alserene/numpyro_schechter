@@ -56,7 +56,7 @@ print(f"log probability at M={mag_val}: {logp}")
 # Note: Sampling is not implemented
 ```
 
-For detailed usage and API documentation, please visit the [Documentation](https://your-readthedocs-url.readthedocs.io).
+For detailed usage and API documentation, please visit the [Documentation](https://numpyro-schechter.readthedocs.io/).
 
 ---
 
