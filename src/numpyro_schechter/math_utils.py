@@ -24,7 +24,7 @@ def schechter_mag(phi_star, M_star, alpha, M):
 
 def s_positive(s: ArrayLike, x: ArrayLike) -> Array:
     """
-    Regularized upper incomplete gamma function * Gamma(s)
+    Regularised upper incomplete gamma function * Gamma(s)
     """
     return gamma(s) * gammaincc(s, x)
 
