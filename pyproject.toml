@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "numpyro_schechter"
-version = "0.0.1"
+version = "0.0.1a1"
 description = "Schechter luminosity function distribution for NumPyro"
 authors = ["Alice Serene <aserene@swin.edu.au>"]
 readme = "README.md"
@@ -14,7 +14,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.11"
 jax = "*"
 jaxlib = "*"
 numpyro = "*"
@@ -22,6 +22,8 @@ numpyro = "*"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2"
 sympy = "^1.12"
+sphinx = "^8.2.3"
+sphinx-rtd-theme = "^3.0.2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
