@@ -52,3 +52,6 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["assets"]
 html_logo = "assets/logo.png"
 
+html_theme_options = {
+    "logo_only": True,
+}
