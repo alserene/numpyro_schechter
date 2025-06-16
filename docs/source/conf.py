@@ -30,6 +30,7 @@ extensions = [
     "sphinx.ext.napoleon",    # support for Google/NumPy style docstrings
     "sphinx.ext.viewcode",    # add links to source code in docs
     "sphinx.ext.autosectionlabel",  # allows cross-referencing sections easily
+    "myst_parser",            # support for Markdown files
 ]
 
 autodoc_member_order = "bysource"
