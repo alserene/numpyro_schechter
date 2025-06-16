@@ -4,11 +4,13 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.11"
-
-python:
-  install:
-    - method: poetry
-      path: .
+  jobs:
+    post_create_environment:
+      - pip install poetry
+    post_install:
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --only main,docs
+      - make -C docs clean
+      - make -C docs html
 
 sphinx:
   configuration: docs/conf.py
