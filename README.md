@@ -1,6 +1,28 @@
 # numpyro_schechter
 
-**Schechter luminosity function distribution for NumPyro**
+**Schechter galaxy luminosity distribution for NumPyro**
+
+<p align="center">
+  <img src="docs/assets/logo.png" alt="numpyro_schechter logo" width="300"/>
+</p>
+
+<p align="center">
+  <a href="https://www.python.org/downloads/release/python-3110/">
+    <img src="https://img.shields.io/badge/python-3.11-blue.svg" alt="Python 3.11">
+  </a>
+  <a href="https://numpyro-schechter.readthedocs.io/en/latest/?badge=latest">
+    <img src="https://readthedocs.org/projects/numpyro-schechter/badge/?version=latest" alt="Docs Status">
+  </a>
+  <a href="https://pypi.org/project/numpyro-schechter/">
+    <img src="https://img.shields.io/pypi/v/numpyro-schechter.svg" alt="PyPI">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License">
+  </a>
+  <!-- <a href="https://github.com/alserene/numpyro_schechter/actions/workflows/tests.yml">
+    <img src="https://github.com/alserene/numpyro_schechter/actions/workflows/tests.yml/badge.svg" alt="Tests">
+  </a> -->
+</p>
 
 ---
 
