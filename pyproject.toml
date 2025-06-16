@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "numpyro_schechter"
-version = "0.0.1a2"
+version = "0.0.1a3"
 description = "Schechter luminosity function distribution for NumPyro"
 authors = ["Alice Serene <aserene@swin.edu.au>"]
 readme = "README.md"
