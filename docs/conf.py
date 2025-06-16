@@ -13,7 +13,7 @@ def format_authors(authors):
     return authors
 
 # Load metadata from pyproject.toml
-with open(os.path.abspath("../../pyproject.toml"), "rb") as f:
+with open(os.path.abspath("../pyproject.toml"), "rb") as f:
     pyproject = load(f)
 
 project = pyproject["tool"]["poetry"]["name"]
