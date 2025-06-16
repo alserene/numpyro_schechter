@@ -33,6 +33,12 @@ extensions = [
     "myst_parser",            # support for Markdown files
 ]
 
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".txt": "markdown",
+    ".md": "markdown",
+}
+
 autodoc_member_order = "bysource"
 
 templates_path = ["_templates"]
@@ -43,4 +49,4 @@ language = "en"
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = "sphinx_rtd_theme"
-html_static_path = ["_static"]
+html_static_path = ["assets"]
