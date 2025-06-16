@@ -55,27 +55,31 @@ pip install numpyro_schechter
 Here is a minimal example showing how to instantiate and use the `SchechterMag` distribution:
 
 ```python
-import jax
 import jax.numpy as jnp
+import numpyro
+import numpyro.distributions as dist
 from numpyro_schechter.distribution import SchechterMag
 
-# Example parameters (ensure alpha + 1 ∈ (-3, 3) and non-integer)
-alpha = -1.3
-M_star = -20.0
-logphi = jnp.log(1e-3)
+# Simulated observed magnitudes
+mag_obs = jnp.linspace(-24, -18, 100)
 
-# Observed magnitude range
-mag_obs = jnp.linspace(-24, -16, 100)
+def model(mag_obs):
+    # Priors
+    alpha = numpyro.sample("alpha", dist.Uniform(-3.0, 1.0))
+    M_star = numpyro.sample("M_star", dist.Uniform(-24.0, -20.0))
+    logphi = numpyro.sample("logphi", dist.Normal(-3.0, 1.0))
 
-# Instantiate the distribution
-schechter_dist = SchechterMag(alpha=alpha, M_star=M_star, logphi=logphi, mag_obs=mag_obs)
+    # Custom likelihood using the SchechterMag distribution
+    schechter_dist = SchechterMag(alpha=alpha, M_star=M_star, logphi=logphi, mag_obs=mag_obs)
+    
+    # Use numpyro.factor to inject the log-likelihood
+    log_likelihood = jnp.sum(schechter_dist.log_prob(mag_obs))
+    numpyro.factor("likelihood", log_likelihood)
 
-# Evaluate log probability at some magnitude value
-mag_val = -21.0
-logp = schechter_dist.log_prob(mag_val)
-print(f"log probability at M={mag_val}: {logp}")
+# You can now run inference with NumPyro's MCMC
+# e.g., numpyro.infer.MCMC(...).run(rng_key, model, mag_obs=...)
 
-# Note: Sampling is not implemented
+# Note: Sampling is not implemented.
 ```
 
 For detailed usage and API documentation, please visit the [Documentation](https://numpyro-schechter.readthedocs.io/).
