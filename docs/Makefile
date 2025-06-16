@@ -1,5 +1,5 @@
 SPHINXBUILD   = poetry run sphinx-build
-SOURCEDIR     = source
+SOURCEDIR     = .
 BUILDDIR      = build
 
 .PHONY: help clean html
