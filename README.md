@@ -3,7 +3,7 @@
 **Schechter galaxy luminosity distribution for NumPyro**
 
 <p align="center">
-  <img src="docs/assets/logo.png" alt="numpyro_schechter logo" width="300"/>
+  <img src="assets/logo.png" alt="numpyro_schechter logo" width="300"/>
 </p>
 
 <p align="center">
