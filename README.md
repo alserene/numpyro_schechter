@@ -19,9 +19,9 @@
   <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License">
   </a>
-  <!-- <a href="https://github.com/alserene/numpyro_schechter/actions/workflows/tests.yml">
+  <a href="https://github.com/alserene/numpyro_schechter/actions/workflows/tests.yml">
     <img src="https://github.com/alserene/numpyro_schechter/actions/workflows/tests.yml/badge.svg" alt="Tests">
-  </a> -->
+  </a>
 </p>
 
 ---
