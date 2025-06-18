@@ -14,7 +14,8 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.11"
+python = ">=3.10,<3.14"
+# python = ">=3.11"
 jax = ">=0.4.25"
 jaxlib = ">=0.4.25"
 numpyro = ">=0.13.2"
