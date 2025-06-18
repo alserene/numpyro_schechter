@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <a href="https://www.python.org/downloads/release/python-3110/">
-    <img src="https://img.shields.io/badge/python-3.11-blue.svg" alt="Python 3.11">
+  <a href="https://pypi.org/project/numpyro-schechter/">
+    <img src="https://img.shields.io/pypi/pyversions/numpyro-schechter.svg" alt="Python Versions">
   </a>
   <a href="https://numpyro-schechter.readthedocs.io/en/latest/?badge=latest">
     <img src="https://readthedocs.org/projects/numpyro-schechter/badge/?version=latest" alt="Docs Status">
