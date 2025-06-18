@@ -15,14 +15,18 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.11"
-jax = "*"
-jaxlib = "*"
-numpyro = "*"
+jax = ">=0.4.25"
+jaxlib = ">=0.4.25"
+numpyro = ">=0.13.2"
+numpy = ">=1.26,<2.0"
+scipy = ">=1.13,<1.15"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.2"
+pytest = "^8.4"
 sympy = "^1.12"
-twine = "^6.1.0"
+twine = "^6.1"
+black = "^25.1"
+ruff = "^0.12"
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "^7"
@@ -37,6 +41,16 @@ testpaths = ["tests"]
 [tool.poetry.urls]
 Homepage = "https://github.com/alserene/numpyro_schechter"
 Issues = "https://github.com/alserene/numpyro_schechter/issues"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = ["E", "F", "W", "B"]
+exclude = ["build", "dist"]
 
 [build-system]
 requires = ["poetry-core"]
