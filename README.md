@@ -42,7 +42,7 @@ You can install the latest development version directly from GitHub:
 pip install git+https://github.com/alserene/numpyro_schechter.git
 ```
 
-Or from PyPI, install via:
+Or from PyPI:
 
 ```bash
 pip install numpyro_schechter
