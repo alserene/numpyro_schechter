@@ -1,7 +1,7 @@
 import pytest
 import jax
 import jax.numpy as jnp
-from sympy import uppergamma, zoo
+from sympy import uppergamma
 
 from numpyro_schechter.math_utils import custom_gammaincc
 
