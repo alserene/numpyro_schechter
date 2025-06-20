@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "numpyro_schechter"
-version = "0.0.1a5"
+version = "0.0.1a6"
 description = "Schechter galaxy luminosity distribution for NumPyro."
 authors = ["Alice Serene <aserene@swin.edu.au>"]
 readme = "README.md"
