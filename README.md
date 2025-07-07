@@ -3,7 +3,7 @@
 **Schechter galaxy luminosity distribution for NumPyro**
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/alserene/numpyro_schechter/main/docs/assets/logo.png" alt="numpyro_schechter logo" width="300"/>
+  <img src="https://raw.githubusercontent.com/alserene/numpyro_schechter/main/docs/assets/logo.png" alt="Schechter distribution logo for numpyro_schechter" width="300"/>
 </p>
 
 <p align="center">
@@ -28,31 +28,47 @@
 
 ## Overview
 
-`numpyro_schechter` provides a NumPyro-compatible probability distribution for Bayesian inference with Schechter luminosity functions in absolute magnitude space. Built for astronomers and statisticians, it includes a JAX-compatible custom implementation of the upper incomplete gamma function, enabling stable and differentiable modelling within probabilistic programming frameworks.
+`numpyro_schechter` provides a NumPyro-compatible probability distribution for Bayesian inference with Schechter luminosity functions in absolute magnitude space.
 
-**Note:** Due to the custom implementation of the incomplete gamma function, the distribution is **only valid when `alpha + 1` is in the range (-3, 3) and is non-integer**. Users are responsible for ensuring parameters fall within this valid range.
+Built for astronomers and statisticians, it includes a JAX-compatible, differentiable implementation of the upper incomplete gamma function, enabling stable and efficient modelling in probabilistic programming frameworks.
+
+---
+
+## Parameter Constraints
+
+Due to the custom normalisation logic, some constraints apply:
+
+- `alpha` must be real and non-integer.
+- The valid range of `alpha + 1` depends on `alpha_domain_depth`. By default, `alpha_domain_depth=3`, which supports the domain `-3 < alpha + 1 < 3`.
+- To model more extreme values of `alpha`, increase the `alpha_domain_depth` parameter (see below).
+- The list of valid depths is fixed and can be queried programmatically:
+  ```python
+  from numpyro_schechter import SchechterMag
+  SchechterMag.supported_depths()
+  # -> [3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30]
+  ```
 
 ---
 
 ## Installation
 
-You can install the latest development version directly from GitHub:
-
-```bash
-pip install git+https://github.com/alserene/numpyro_schechter.git
-```
-
-Or from PyPI:
+From PyPI:
 
 ```bash
 pip install numpyro_schechter
+```
+
+From GitHub (latest development version):
+
+```bash
+pip install git+https://github.com/alserene/numpyro_schechter.git
 ```
 
 ---
 
 ## Usage
 
-Here is a minimal example showing how to instantiate and use the `SchechterMag` distribution:
+Here is a minimal example showing how to use the `SchechterMag` distribution:
 
 ```python
 import jax.numpy as jnp
@@ -79,7 +95,7 @@ def model(mag_obs):
 # You can now run inference with NumPyro's MCMC
 # e.g., numpyro.infer.MCMC(...).run(rng_key, model, mag_obs=...)
 
-# Note: Sampling is not implemented.
+# Note: Sampling is not implemented for SchechterMag; it is intended for use as a likelihood in inference.
 ```
 
 For detailed usage and API documentation, please visit the [Documentation](https://numpyro-schechter.readthedocs.io/).
@@ -101,7 +117,7 @@ poetry run pytest
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file.
 
 ---
 
