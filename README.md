@@ -105,7 +105,10 @@ def model(mag_obs):
 The double Schechter function is the sum of two Schechter components, each with their own parameters 
 $(\alpha, M^\*, \phi^\*)$, normalised together over the observed magnitude range:
 
-$\phi_{\text{double}}(M) = \frac{\phi_1(M) + \phi_2(M)}{\phi_1^\* \Gamma_1 + \phi_2^\* \Gamma_2}$
+$$
+\phi_{\text{double}}(M) = 
+\frac{\phi_1(M) + \phi_2(M)}{\phi_1^\* \Gamma_1 + \phi_2^\* \Gamma_2}
+$$
 
 where $\Gamma_i$ is the upper incomplete gamma integral for component $i$.
 
