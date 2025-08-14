@@ -161,7 +161,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Created by
  - Alice — [aserene@swin.edu.au](mailto:aserene@swin.edu.au)
  - Aryan - [aryanbansal@swin.edu.au](mailto:aryanbansal@swin.edu.au)
- - Ned - [entaylor@swin.edu.au](mailto:entaylor@swin.edu.au)
+ - Edward - [entaylor@swin.edu.au](mailto:entaylor@swin.edu.au)
 
 ---
 
