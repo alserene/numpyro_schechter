@@ -5,10 +5,11 @@ import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS
 from jax import random
 
-from numpyro_schechter.distribution import SchechterMag
+from numpyro_schechter.distribution import SchechterMag, DoubleSchechterMag
 from numpyro_schechter.math_utils import SUPPORTED_ALPHA_DOMAIN_DEPTHS
 
 
+# Tests for standard Schechter ------------------------
 def test_schechtermag_inference_runs():
     rng_key = random.PRNGKey(0)
     mag_data = jnp.linspace(-22.5, -20.5, 50)  # synthetic data
@@ -48,3 +49,34 @@ def test_invalid_alpha_domain_depth():
 
 def test_supported_depths_list():
     assert SchechterMag.supported_depths() == SUPPORTED_ALPHA_DOMAIN_DEPTHS
+
+
+# Tests for Double Schechter ------------------------
+def test_doubleschechtermag_log_prob_finite():
+    mag_obs = jnp.linspace(-23, -20, 5)
+    d = DoubleSchechterMag(alpha1=-1.2, M_star1=-21.0, logphi1=-2.5,
+                           alpha2=-0.5, M_star2=-20.5, logphi2=-2.8,
+                           mag_obs=mag_obs)
+    logp = d.log_prob(mag_obs)
+    assert jnp.all(jnp.isfinite(logp))
+
+
+def test_doubleschechtermag_inference_runs():
+    rng_key = random.PRNGKey(0)
+    mag_data = jnp.linspace(-22.5, -20.5, 50)
+
+    def model(mag_obs):
+        alpha1 = numpyro.sample("alpha1", dist.Uniform(-3.0, 1.0))
+        M_star1 = numpyro.sample("M_star1", dist.Uniform(-24.0, -20.0))
+        logphi1 = numpyro.sample("logphi1", dist.Normal(-3.0, 1.0))
+        alpha2 = numpyro.sample("alpha2", dist.Uniform(-3.0, 1.0))
+        M_star2 = numpyro.sample("M_star2", dist.Uniform(-24.0, -20.0))
+        logphi2 = numpyro.sample("logphi2", dist.Normal(-3.0, 1.0))
+        numpyro.sample("mag", DoubleSchechterMag(alpha1, M_star1, logphi1,
+                                                 alpha2, M_star2, logphi2,
+                                                 mag_obs), obs=mag_obs)
+
+    mcmc = MCMC(NUTS(model), num_warmup=10, num_samples=20)
+    mcmc.run(rng_key, mag_obs=mag_data)
+    samples = mcmc.get_samples()
+    assert all(k in samples for k in ["alpha1", "M_star1", "logphi1", "alpha2", "M_star2", "logphi2"])

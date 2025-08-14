@@ -74,3 +74,82 @@ class SchechterMag(Distribution):
 
     def sample(self, key, sample_shape=()):
         raise NotImplementedError("Sampling not implemented for SchechterMag.")
+
+
+class DoubleSchechterMag(Distribution):
+    support = constraints.real
+
+    @property
+    def has_rsample(self):
+        return False
+
+    @staticmethod
+    def supported_depths():
+        """
+        Returns a list of supported values for `alpha_domain_depth`, corresponding to increasing valid alpha ranges.
+        Larger `alpha_domain_depth` will see reduced performance due to the corresponding increase in recursions.
+        """
+        return SUPPORTED_ALPHA_DOMAIN_DEPTHS
+
+    def __init__(self,
+                 alpha1, M_star1, logphi1,
+                 alpha2, M_star2, logphi2,
+                 mag_obs, alpha_domain_depth=3,
+                 validate_args=None):
+        self.alpha1 = alpha1
+        self.M_star1 = M_star1
+        self.logphi1 = logphi1
+        self.phi_star1 = jnp.exp(logphi1)
+
+        self.alpha2 = alpha2
+        self.M_star2 = M_star2
+        self.logphi2 = logphi2
+        self.phi_star2 = jnp.exp(logphi2)
+
+        self.mag_obs = mag_obs
+        self.alpha_domain_depth = alpha_domain_depth
+
+        M_min, M_max = jnp.min(mag_obs), jnp.max(mag_obs)
+
+        # First component norm
+        a1 = alpha1 + 1.0
+        x1_min = 10 ** (0.4 * (M_star1 - M_max))
+        x1_max = 10 ** (0.4 * (M_star1 - M_min))
+        norm1 = self.phi_star1 * (
+            custom_gammaincc(a1, x1_min, recur_depth=alpha_domain_depth) -
+            custom_gammaincc(a1, x1_max, recur_depth=alpha_domain_depth)
+        )
+
+        # Second component norm
+        a2 = alpha2 + 1.0
+        x2_min = 10 ** (0.4 * (M_star2 - M_max))
+        x2_max = 10 ** (0.4 * (M_star2 - M_min))
+        norm2 = self.phi_star2 * (
+            custom_gammaincc(a2, x2_min, recur_depth=alpha_domain_depth) -
+            custom_gammaincc(a2, x2_max, recur_depth=alpha_domain_depth)
+        )
+
+        norm_total = norm1 + norm2
+        self.norm = jnp.where(norm_total > 0, norm_total, jnp.inf)
+
+        super().__init__(batch_shape=(), event_shape=(), validate_args=validate_args)
+    
+    def __str__(self):
+        return (
+            f"DoubleSchechterMag distribution\n"
+            f"  alpha1={self.alpha1}, M_star1={self.M_star1}, logphi1={self.logphi1}\n"
+            f"  alpha2={self.alpha2}, M_star2={self.M_star2}, logphi2={self.logphi2}\n"
+            f"  alpha_domain_depth={self.alpha_domain_depth}"
+        )
+
+    def __repr__(self):
+        return str(self)
+
+    def log_prob(self, value):
+        pdf1 = schechter_mag(self.phi_star1, self.M_star1, self.alpha1, value)
+        pdf2 = schechter_mag(self.phi_star2, self.M_star2, self.alpha2, value)
+        pdf_total = pdf1 + pdf2
+        return jnp.log(pdf_total / self.norm + 1e-30)
+
+    def sample(self, key, sample_shape=()):
+        raise NotImplementedError("Sampling not implemented for DoubleSchechterMag.")

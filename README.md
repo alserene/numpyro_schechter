@@ -28,7 +28,7 @@
 
 ## Overview
 
-`numpyro_schechter` provides a NumPyro-compatible probability distribution for Bayesian inference with Schechter luminosity functions in absolute magnitude space.
+`numpyro_schechter` provides NumPyro-compatible probability distributions for Bayesian inference with Schechter and double Schechter luminosity functions in absolute magnitude space.
 
 Built for astronomers and statisticians, it includes a JAX-compatible, differentiable implementation of the upper incomplete gamma function, enabling stable and efficient modelling in probabilistic programming frameworks.
 
@@ -68,6 +68,8 @@ pip install git+https://github.com/alserene/numpyro_schechter.git
 
 ## Usage
 
+### Single Schechter Example
+
 Here is a minimal example showing how to use the `SchechterMag` distribution:
 
 ```python
@@ -96,6 +98,36 @@ def model(mag_obs):
 # e.g., numpyro.infer.MCMC(...).run(rng_key, model, mag_obs=...)
 
 # Note: Sampling is not implemented for SchechterMag; it is intended for use as a likelihood in inference.
+```
+
+### Double Schechter Example
+
+The double Schechter function is the sum of two Schechter components, each with their own parameters 
+$(\alpha, M^\*, \phi^\*)$, normalised together over the observed magnitude range:
+
+$\phi_{\text{double}}(M) = \frac{\phi_1(M) + \phi_2(M)}{\phi_1^\* \Gamma_1 + \phi_2^\* \Gamma_2}$
+
+where $\Gamma_i$ is the upper incomplete gamma integral for component $i$.
+
+```
+from numpyro_schechter import DoubleSchechterMag
+
+mag_obs = jnp.linspace(-24, -18, 100)
+
+def model(mag_obs):
+    alpha1 = numpyro.sample("alpha1", dist.Uniform(-3.0, 1.0))
+    M_star1 = numpyro.sample("M_star1", dist.Uniform(-24.0, -20.0))
+    logphi1 = numpyro.sample("logphi1", dist.Normal(-3.0, 1.0))
+
+    alpha2 = numpyro.sample("alpha2", dist.Uniform(-3.0, 1.0))
+    M_star2 = numpyro.sample("M_star2", dist.Uniform(-24.0, -20.0))
+    logphi2 = numpyro.sample("logphi2", dist.Normal(-3.0, 1.0))
+
+    double_sch = DoubleSchechterMag(alpha1, M_star1, logphi1,
+                                    alpha2, M_star2, logphi2,
+                                    mag_obs=mag_obs)
+
+    numpyro.factor("likelihood", jnp.sum(double_sch.log_prob(mag_obs)))
 ```
 
 For detailed usage and API documentation, please visit the [Documentation](https://numpyro-schechter.readthedocs.io/).
