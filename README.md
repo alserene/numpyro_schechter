@@ -110,7 +110,7 @@ $$
 \frac{\phi_1(M) + \phi_2(M)}{\phi_1^\* \Gamma_1 + \phi_2^\* \Gamma_2}
 $$
 
-where $\Gamma_i$ is the upper incomplete gamma integral for component $i$.
+where $\Gamma_i$ is the upper incomplete gamma function for component $i$.
 
 ```
 from numpyro_schechter import DoubleSchechterMag
@@ -158,7 +158,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Created by Alice — [aserene@swin.edu.au](mailto:aserene@swin.edu.au)
+Created by
+ - Alice — [aserene@swin.edu.au](mailto:aserene@swin.edu.au)
+ - Aryan - [aryanbansal@swin.edu.au](mailto:aryanbansal@swin.edu.au)
+ - Ned - [entaylor@swin.edu.au](mailto:entaylor@swin.edu.au)
 
 ---
 

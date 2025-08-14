@@ -2,7 +2,11 @@
 name = "numpyro_schechter"
 version = "1.0.0"
 description = "Schechter galaxy luminosity distribution for NumPyro."
-authors = ["Alice Serene <aserene@swin.edu.au>"]
+authors = [
+    "Alice Serene <aserene@swin.edu.au>",
+    "Aryan Bansal <aryanbansal@swin.edu.au>",
+    "Ned Taylor <entaylor@swin.edu.au>",
+]
 readme = "README.md"
 license = "MIT"
 packages = [{ include = "numpyro_schechter", from = "src" }]
