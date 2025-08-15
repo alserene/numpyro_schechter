@@ -47,6 +47,7 @@ Due to the custom normalisation logic, some constraints apply:
   SchechterMag.supported_depths()
   # -> [3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30]
   ```
+- If you set `include_poisson_term=True`, the log-likelihood will also include a Poisson term for the total number counts, with expectation `N_exp = norm * volume`. The volume argument defaults to `1.0` but can be set to your survey volume.
 
 ---
 
@@ -87,17 +88,22 @@ def model(mag_obs):
     M_star = numpyro.sample("M_star", dist.Uniform(-24.0, -20.0))
     logphi = numpyro.sample("logphi", dist.Normal(-3.0, 1.0))
 
-    # Custom likelihood using the SchechterMag distribution
-    schechter_dist = SchechterMag(alpha=alpha, M_star=M_star, logphi=logphi, mag_obs=mag_obs)
+    # Custom likelihood using the SchechterMag distribution, fitting only
+    # the shape. Adding include_poisson_term=True would include total counts.
+    # See Double Schechter Example for fitting both shape and total count.
+    schechter_dist = SchechterMag(alpha=alpha, M_star=M_star, logphi=logphi,
+                                  mag_obs=mag_obs)
     
-    # Use numpyro.factor to inject the log-likelihood
+    # Manually inject log-likelihood of observed magnitudes.
+    # Required because SchechterMag/DoubleSchechterMag are custom distributions.
     log_likelihood = jnp.sum(schechter_dist.log_prob(mag_obs))
     numpyro.factor("likelihood", log_likelihood)
 
 # You can now run inference with NumPyro's MCMC
 # e.g., numpyro.infer.MCMC(...).run(rng_key, model, mag_obs=...)
 
-# Note: Sampling is not implemented for SchechterMag; it is intended for use as a likelihood in inference.
+# Note: Sampling is not implemented for SchechterMag or DoubleSchechterMag;
+# it is intended for use as a likelihood in inference.
 ```
 
 ### Double Schechter Example
@@ -112,25 +118,45 @@ $$
 
 where $\Gamma_i$ is the upper incomplete gamma function for component $i$.
 
-```
+```python
+import jax.numpy as jnp
+import numpyro
+import numpyro.distributions as dist
 from numpyro_schechter import DoubleSchechterMag
 
-mag_obs = jnp.linspace(-24, -18, 100)
+def double_schechter_model(mag_obs, volume):
+    # Slopes
+    alpha1 = numpyro.sample("alpha1", dist.TruncatedNormal(-0.3, 0.1, low=-1.5, high=0.5))
+    alpha2 = numpyro.sample("alpha2", dist.TruncatedNormal(-1.3, 0.1, low=-2.5, high=-0.5))
 
-def model(mag_obs):
-    alpha1 = numpyro.sample("alpha1", dist.Uniform(-3.0, 1.0))
-    M_star1 = numpyro.sample("M_star1", dist.Uniform(-24.0, -20.0))
-    logphi1 = numpyro.sample("logphi1", dist.Normal(-3.0, 1.0))
+    # Normalisations (log10 φ*)
+    logphi1 = numpyro.sample("logphi1", dist.Normal(-2.5, 0.3))
+    logphi2 = numpyro.sample("logphi2", dist.Normal(-3.0, 0.3))
 
-    alpha2 = numpyro.sample("alpha2", dist.Uniform(-3.0, 1.0))
-    M_star2 = numpyro.sample("M_star2", dist.Uniform(-24.0, -20.0))
-    logphi2 = numpyro.sample("logphi2", dist.Normal(-3.0, 1.0))
+    # Break magnitudes
+    M_star1 = numpyro.sample("M_star1", dist.TruncatedNormal(-21.0, 0.5, low=-23.0, high=-19.0))
+    M_star2 = numpyro.sample("M_star2", dist.TruncatedNormal(-21.5, 0.5, low=-23.5, high=-19.5))
 
-    double_sch = DoubleSchechterMag(alpha1, M_star1, logphi1,
+    # Likelihood: includes both point term and Poisson count term to fit
+    # both shape and total count. If include_poisson_term=True, then volume
+    # is used to scale expected counts and defaults to 1.0.
+    dbl_schechter_dist = DoubleSchechterMag(alpha1, M_star1, logphi1,
                                     alpha2, M_star2, logphi2,
-                                    mag_obs=mag_obs)
+                                    mag_obs=mag_obs,
+                                    include_poisson_term=True,
+                                    volume=volume)
 
-    numpyro.factor("likelihood", jnp.sum(double_sch.log_prob(mag_obs)))
+    # Manually inject log-likelihood of observed magnitudes.
+    # Required because SchechterMag/DoubleSchechterMag are custom distributions.
+    log_likelihood = jnp.sum(dbl_schechter_dist.log_prob(mag_obs))
+    numpyro.factor("likelihood", log_likelihood)
+
+# --- Example MCMC runner (same approach can be used for SchechterMag)
+# from numpyro.infer import MCMC, NUTS
+# mcmc = MCMC(NUTS(double_schechter_model), num_warmup=1000, num_samples=2000)
+# mcmc.run(rng_key, mag_obs=your_magnitude_array, volume=your_survey_volume)
+# samples = mcmc.get_samples()
+
 ```
 
 For detailed usage and API documentation, please visit the [Documentation](https://numpyro-schechter.readthedocs.io/).
