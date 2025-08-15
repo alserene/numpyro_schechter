@@ -9,7 +9,7 @@ from numpyro_schechter.distribution import SchechterMag, DoubleSchechterMag
 from numpyro_schechter.math_utils import SUPPORTED_ALPHA_DOMAIN_DEPTHS
 
 
-# Tests for standard Schechter ------------------------
+# Tests for Single Schechter ------------------------
 def test_schechtermag_inference_runs():
     rng_key = random.PRNGKey(0)
     mag_data = jnp.linspace(-22.5, -20.5, 50)  # synthetic data
@@ -32,6 +32,12 @@ def test_schechter_log_prob_finite():
     logp = d.log_prob(mag_obs)
     assert jnp.all(jnp.isfinite(logp))
 
+def test_schechter_log_prob_with_poisson():
+    mag_obs = jnp.linspace(-23, -20, 5)
+    d = SchechterMag(alpha=-1.2, M_star=-21.0, logphi=-2.5, mag_obs=mag_obs,
+                     include_poisson_term=True, volume=6e5)
+    logp = d.log_prob(mag_obs)
+    assert jnp.all(jnp.isfinite(logp))
 
 @pytest.mark.parametrize("depth", SUPPORTED_ALPHA_DOMAIN_DEPTHS)
 def test_log_prob_finite_for_supported_depth(depth):
@@ -52,15 +58,6 @@ def test_supported_depths_list():
 
 
 # Tests for Double Schechter ------------------------
-def test_doubleschechtermag_log_prob_finite():
-    mag_obs = jnp.linspace(-23, -20, 5)
-    d = DoubleSchechterMag(alpha1=-1.2, M_star1=-21.0, logphi1=-2.5,
-                           alpha2=-0.5, M_star2=-20.5, logphi2=-2.8,
-                           mag_obs=mag_obs)
-    logp = d.log_prob(mag_obs)
-    assert jnp.all(jnp.isfinite(logp))
-
-
 def test_doubleschechtermag_inference_runs():
     rng_key = random.PRNGKey(0)
     mag_data = jnp.linspace(-22.5, -20.5, 50)
@@ -80,3 +77,20 @@ def test_doubleschechtermag_inference_runs():
     mcmc.run(rng_key, mag_obs=mag_data)
     samples = mcmc.get_samples()
     assert all(k in samples for k in ["alpha1", "M_star1", "logphi1", "alpha2", "M_star2", "logphi2"])
+
+def test_doubleschechtermag_log_prob_finite():
+    mag_obs = jnp.linspace(-23, -20, 5)
+    d = DoubleSchechterMag(alpha1=-1.2, M_star1=-21.0, logphi1=-2.5,
+                           alpha2=-0.5, M_star2=-20.5, logphi2=-2.8,
+                           mag_obs=mag_obs)
+    logp = d.log_prob(mag_obs)
+    assert jnp.all(jnp.isfinite(logp))
+
+
+def test_doubleschechtermag_log_prob_with_poisson():
+    mag_obs = jnp.linspace(-23, -20, 5)
+    d = DoubleSchechterMag(alpha1=-1.2, M_star1=-21.0, logphi1=-2.5,
+                           alpha2=-0.5, M_star2=-20.5, logphi2=-2.8,
+                           mag_obs=mag_obs, include_poisson_term=True, volume=6e5)
+    logp = d.log_prob(mag_obs)
+    assert jnp.all(jnp.isfinite(logp))
