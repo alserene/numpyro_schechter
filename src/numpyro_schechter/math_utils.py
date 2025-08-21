@@ -8,7 +8,7 @@ from jax._src.typing import Array, ArrayLike
 jax.config.update("jax_enable_x64", True)
 
 SUPPORTED_ALPHA_DOMAIN_DEPTHS = [3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30]
-
+LN10_0p4 = 0.4 * jnp.log(10.0)
 
 def schechter_mag(phi_star, M_star, alpha, M):
     """
@@ -17,7 +17,7 @@ def schechter_mag(phi_star, M_star, alpha, M):
     # M: absolute magnitude
     x = 10 ** (0.4 * (M_star - M))
     return (
-        0.4 * jnp.log(10.0)
+        LN10_0p4
         * phi_star
         * x ** (alpha + 1)
         * jnp.exp(-x)
